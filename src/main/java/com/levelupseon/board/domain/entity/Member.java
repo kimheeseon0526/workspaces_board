@@ -1,4 +1,4 @@
-package com.levelupseon.board.entity;
+package com.levelupseon.board.domain.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -13,8 +13,6 @@ import lombok.*;
 public class Member extends BaseEntity {
   @Id
   private String email;
-
   private String password;
-
   private String name;
 }

@@ -1,12 +1,11 @@
 package com.levelupseon.board.service;
 
-import com.levelupseon.board.dto.BoardDTO;
-import com.levelupseon.board.dto.PageRequestDTO;
-import com.levelupseon.board.dto.PageResponseDTO;
-import com.levelupseon.board.entity.Board;
-import com.levelupseon.board.entity.Member;
-import com.levelupseon.board.projection.dto.BoardWithReplyCount;
-import org.springframework.stereotype.Service;
+import com.levelupseon.board.domain.dto.BoardDTO;
+import com.levelupseon.board.domain.dto.PageRequestDTO;
+import com.levelupseon.board.domain.dto.PageResponseDTO;
+import com.levelupseon.board.domain.entity.Board;
+import com.levelupseon.board.domain.entity.Member;
+import com.levelupseon.board.domain.projection.dto.BoardWithReplyCount;
 
 
 public interface BoardService {
@@ -47,14 +46,14 @@ public interface BoardService {
 
   default BoardDTO projectionToDTO(BoardWithReplyCount entity) {
     return BoardDTO.builder()
-            .bno(entity.getBoard().getBno())
-            .title(entity.getBoard().getTitle())
-            .content (entity.getBoard().getContent())
-            .regDate(entity.getBoard().getRegDate())
-            .modDate(entity.getBoard().getModDate())
-            .writerEmail(entity.getBoard().getWriter().getEmail())
-            .writerName(entity.getBoard().getWriter().getName())
-            .replyCount(entity.getReplyCount())
+            .bno(entity.board().getBno())
+            .title(entity.board().getTitle())
+            .content (entity.board().getContent())
+            .regDate(entity.board().getRegDate())
+            .modDate(entity.board().getModDate())
+            .writerEmail(entity.board().getWriter().getEmail())
+            .writerName(entity.board().getWriter().getName())
+            .replyCount(entity.replyCount())
             .build();
   }
 

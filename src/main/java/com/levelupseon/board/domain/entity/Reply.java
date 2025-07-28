@@ -1,5 +1,4 @@
-package com.levelupseon.board.entity;
-
+package com.levelupseon.board.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,17 +8,13 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@ToString
+@ToString(exclude = "board")
 public class Reply extends BaseEntity {
-
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long rno;
-
   private String text;
-
   private String replyer;
 
-  //의존 게시글 필요
-  @ManyToOne
+  @ManyToOne(fetch =  FetchType.LAZY)
   private Board board;
 }

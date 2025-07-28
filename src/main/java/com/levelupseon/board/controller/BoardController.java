@@ -1,13 +1,11 @@
 package com.levelupseon.board.controller;
 
-import com.levelupseon.board.dto.BoardDTO;
-import com.levelupseon.board.dto.PageRequestDTO;
+import com.levelupseon.board.domain.dto.BoardDTO;
+import com.levelupseon.board.domain.dto.PageRequestDTO;
 import com.levelupseon.board.service.BoardService;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -36,6 +34,38 @@ public class BoardController {
   public String register(BoardDTO dto, RedirectAttributes rttr) {
     //새로 추가된 엔터티 번호
     rttr.addFlashAttribute("msg", service.register(dto));
+    return "redirect:/board/list";
+  }
+
+  @GetMapping("read")
+  public void read(@ModelAttribute("requestDto") PageRequestDTO dto, Long bno, Model model) {
+    model.addAttribute("dto", service.get(bno));
+
+  }
+
+  @GetMapping("modify")
+  public void modify (@ModelAttribute("requestDto") PageRequestDTO dto, Long bno, Model model){
+    model.addAttribute("dto", service.get(bno));
+  }
+
+  @PostMapping("modify")
+  public String modify (@ModelAttribute("requestDto") PageRequestDTO dto, BoardDTO boardDTO, RedirectAttributes rttr){
+    service.modify(boardDTO);
+    rttr.addAttribute("bno", boardDTO.getBno());
+    rttr.addAttribute("page", dto.getPage());
+    rttr.addAttribute("size", dto.getSize());
+    rttr.addAttribute("type", dto.getType());
+    rttr.addAttribute("keyword", dto.getKeyword());
+    return "redirect:/board/read";
+  }
+
+  @PostMapping("remove")
+  public String remove(PageRequestDTO dto, Model model, Long bno, RedirectAttributes rttr) {
+    service.remove(bno);
+
+    rttr.addFlashAttribute("msg", bno);
+    rttr.addAttribute("page", dto.getPage());
+    rttr.addAttribute("size", dto.getSize());
     return "redirect:/board/list";
   }
 

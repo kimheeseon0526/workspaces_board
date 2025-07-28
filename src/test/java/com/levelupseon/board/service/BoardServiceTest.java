@@ -1,7 +1,7 @@
 package com.levelupseon.board.service;
 
-import com.levelupseon.board.dto.BoardDTO;
-import com.levelupseon.board.dto.PageRequestDTO;
+import com.levelupseon.board.domain.dto.BoardDTO;
+import com.levelupseon.board.domain.dto.PageRequestDTO;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,17 +36,18 @@ public class BoardServiceTest {
     log.info(service.get(101L));
   }
 
-  @Test
-  @Transactional
-  public void testRemove() {
-    service.remove(3L);
-  }
+
 
   @Test
   public void testModify() {
     BoardDTO dto = service.get(101L);
     dto.setTitle("수정된 제목제목");
     service.modify(dto);
-    //쿼리 총 3번 실행
+  }
+
+  @Test
+  @Transactional
+  public void testRemove() {
+    service.remove(116L);
   }
 }

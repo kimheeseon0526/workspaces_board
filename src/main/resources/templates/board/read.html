@@ -4,11 +4,11 @@
   <th:block th:fragment="content">
     <h1>Guestbook Read Page</h1>
 
-    <form th:action="@{/templates/board/read}" method="get">
+    <form th:action="@{/board/read}" method="get">
 
     <div class="form-group">
-      <label for="gno">gno</label>
-      <input type="text" class="form-control" name="gno" placeholder="gno" id="gno" th:value="${dto.gno}" readonly="readonly">
+      <label for="bno">bno</label>
+      <input type="text" class="form-control" name="bno" placeholder="bno" id="bno" th:value="${dto.bno}" readonly="readonly">
     </div>
     <div class="form-group">
       <label for="title">Title</label>
@@ -20,21 +20,95 @@
     </div>
     <div class="form-group">
       <label>Writer</label>
-      <input type="text" class="form-control" name="writer" placeholder="Writer" th:value="${dto.writer}" readonly="readonly">
+      <input type="text" class="form-control" name="writerName" placeholder="writerName" th:value="${dto.writerName}" readonly="readonly">
     </div>
     <div class="form-group">
       <label>regDate</label>
-      <input type="text" class="form-control" name="regDate" placeholder="regDate" th:value="${dto.regDate}" readonly="readonly">
+      <input type="text" class="form-control" name="regDate" placeholder="regDate" th:value="${#temporals.format(dto.regDate, 'yyyy/MM/dd')}" readonly="readonly">
     </div>
     <div class="form-group">
       <label>modDate</label>
-      <input type="text" class="form-control" name="modDate" placeholder="modDate" th:value="${dto.modDate}" readonly="readonly">
+      <input type="text" class="form-control" name="modDate" placeholder="modDate" th:value="${#temporals.format(dto.modDate, 'yyyy/MM/dd')}"readonly="readonly">
     </div>
 <!--    <a th:href="@{/guestbook/modify(page = ${pageDto.page}, size = ${pageDto.size}, gno = ${pageDto.gno})}" class="btn btn-primary mt-3">modify</a>-->
 <!--    <a th:href="@{/guestbook/list(page = ${pageDto.page}, size = ${pageDto.size})}" class="btn btn-primary mt-3">List</a>-->
-      <a th:href="@{/templates/board/modify(page = ${pageDto.page}, size = ${pageDto.size}, gno= ${dto.gno}, type=${pageDto.type}, keyword=${pageDto.keyword})}" class="btn btn-primary mt-3">modify</a>
-      <a th:href="@{/templates/board/list(page = ${pageDto.page}, size = ${pageDto.size}, type=${pageDto.type}, keyword=${pageDto.keyword})}" class="btn btn-primary mt-3">List</a>
+      <a th:href="@{/board/modify(page = ${requestDto.page}, size = ${requestDto.size}, bno= ${dto.bno}, type=${requestDto.type}, keyword=${requestDto.keyword})}" class="btn btn-primary mt-3">modify</a>
+      <a th:href="@{/board/list(page = ${requestDto.page}, size = ${requestDto.size}, type=${requestDto.type}, keyword=${requestDto.keyword})}" class="btn btn-primary mt-3">List</a>
   </form>
   </th:block>
 </th:block>
+<script>
+  //전역 변수로 counter 0
+  //10 ** 3
+
+  let counter = 0;
+  function callLocal(n, cb) {
+    const add = 10 ** n;
+    counter += add;
+    console.log(`[local] 10^${n} = ${add} -> counter : ${counter}`);
+  }
+  function callAsync(n, cb) {
+    const add = 10 ** n;
+    const delay = Math.floor(Math.random() * 1000); //0 ~ 999 사이의 난수
+    if(cb) cb();
+
+    setTimeout(() => {
+      counter += add;
+      console.log(`[async] 10^${n} = ${add} -> delay : ${delay}ms`);
+      if(cb) cb();
+    }, delay);
+  }
+  //callback : 정의한 시점이 아니라 추후에 호출되는 것. 파라미터로 전달되는 함수
+
+  callAsync(0, () => {
+    callAsync(1, () => {
+      callAsync(2, () => {
+        callAsync(3, () => {
+          callAsync(4, () => {
+            callLocal(5, () => {
+              callLocal(6, () => {
+                callLocal(7, () => {
+                  callLocal(8, () => {
+                    callLocal(9, () => {
+                      console.log("내가 마지막")
+                    });
+                  });
+                });
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+
+  // $.ajax({
+  //   success: (data) => {
+  //     $.ajax({
+  //       success: (data) => {
+  //
+  //       }
+  //     })
+  //   }
+  // })
+
+  // $.ajax({
+  //   success: (data) => {},
+  //   error: (error) => {},
+  //   finally: (data) => {}
+  // })
+  //     .done((data) => {
+  //
+  //     })
+  //     .fail(error => {
+  //
+  //     })
+  //     .always((data) => {
+  //
+  //     })
+  //     .done((data) => {
+  //
+  //     })
+
+</script>
 </html>

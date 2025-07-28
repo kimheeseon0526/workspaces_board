@@ -1,7 +1,7 @@
 package com.levelupseon.board.repository;
 
 
-import com.levelupseon.board.entity.Member;
+import com.levelupseon.board.domain.entity.Member;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

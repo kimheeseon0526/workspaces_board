@@ -1,8 +1,8 @@
 package com.levelupseon.board.repository;
 
-import com.levelupseon.board.projection.dto.*;
-import com.levelupseon.board.entity.Board;
-import com.levelupseon.board.entity.Member;
+import com.levelupseon.board.domain.projection.dto.*;
+import com.levelupseon.board.domain.entity.Board;
+import com.levelupseon.board.domain.entity.Member;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -98,6 +97,23 @@ public class BoardRepositoryTest {
     Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
     Page<BoardWithReplyCount> list = repository.getBoardWithReplyCount(pageable);
     list.stream().forEach(log::info);
+  }
+
+  @Test
+  public void testSearch1() {
+    repository.search1();
+  }
+
+  @Test
+  public void testSearchPage() {
+    Page<BoardWithReplyCount> bwrc =  repository.searchPage("tcw", "title", PageRequest.of(3, 5,
+            Sort.by(Sort.Direction.DESC, "bno").and(Sort.by(Sort.Direction.ASC, "title"))));
+
+    log.info(bwrc.getTotalPages());
+    log.info(bwrc.getTotalElements());
+    bwrc.getContent().forEach(log::info);
+
+
   }
 
 }

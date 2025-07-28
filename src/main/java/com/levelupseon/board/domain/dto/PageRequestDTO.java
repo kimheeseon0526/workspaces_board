@@ -1,4 +1,4 @@
-package com.levelupseon.board.dto;
+package com.levelupseon.board.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
