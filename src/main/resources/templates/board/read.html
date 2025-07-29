@@ -91,24 +91,24 @@
       //e.type -> click 이렇게 나온다.
       //dayjs 전역 설정
       fetch(`/replies/board/${bno}`)
-              .then(resp => resp.json())
-              .then(arr => {   //여기서 this는 windows객체 이다.
-                console.log(arr);
-                //success function;  //이벤트 위임 query selecter, 템플릿 리터럴을 사용하여 작성
-                document.querySelector(".replyCount").innerHTML = "Reply Count" + arr.length; // 기존 리스트 초기화
-                listGroup.innerHTML = arr.map(r => {  //,  listGroup의 내부에 html을 만듬
-                          console.log(r)  //문자열 배열들,
-                          return `
-                <li class="card list-group-item" data-rno="${r.rno}"><b>${r.rno}</b>
-                <div class="card-body">
-                   <h5 class="card-title">${r.text}</h5>
-                   <h5 class="card-subtitle mb-2 text-muted">${r.replyer}</h5>
-                   <p class="card-text">${dayjs(r.regDate).fromNow()}</p>
-                 </div>
-                </li>
-              `;
-                        }).join("")
-                      })
+            .then(resp => resp.json())
+            .then(arr => {   //여기서 this는 windows객체 이다.
+              console.log(arr);
+              //success function;  //이벤트 위임 query selecter, 템플릿 리터럴을 사용하여 작성
+              document.querySelector(".replyCount").innerHTML = "Reply Count" + arr.length; // 기존 리스트 초기화
+              listGroup.innerHTML = arr.map(r => {  //,  listGroup의 내부에 html을 만듬
+                        console.log(r)  //문자열 배열들,
+                        return `
+              <li class="card list-group-item" data-rno="${r.rno}"><b>${r.rno}</b>
+              <div class="card-body">
+                 <h5 class="card-title">${r.text}</h5>
+                 <h5 class="card-subtitle mb-2 text-muted">${r.replyer}</h5>
+                 <p class="card-text">${dayjs(r.regDate).fromNow()}</p>
+               </div>
+              </li>
+            `;
+                      }).join("")
+                    })
                   };
     document.querySelector('.replyCount').addEventListener("click", () => loadJSONData()); //배열을 문자로 합침. 문자열 배열을 통합된 문자열로 출력하는 과정이 있어야함
 
