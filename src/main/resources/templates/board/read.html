@@ -4,7 +4,6 @@
   <th:block th:fragment="content">
     <h1>Guestbook Read Page</h1>
 
-    <form th:action="@{/board/read}" method="get">
 
     <div class="form-group">
       <label for="bno">bno</label>
@@ -22,7 +21,7 @@
       <label>Writer</label>
       <input type="text" class="form-control" name="writerName" placeholder="writerName" th:value="${dto.writerName}" readonly="readonly">
     </div>
-    <div class="form-group">
+    <div class="form-group my-4">
       <label>regDate</label>
       <input type="text" class="form-control" name="regDate" placeholder="regDate" th:value="${#temporals.format(dto.regDate, 'yyyy/MM/dd')}" readonly="readonly">
     </div>
@@ -30,85 +29,148 @@
       <label>modDate</label>
       <input type="text" class="form-control" name="modDate" placeholder="modDate" th:value="${#temporals.format(dto.modDate, 'yyyy/MM/dd')}"readonly="readonly">
     </div>
-<!--    <a th:href="@{/guestbook/modify(page = ${pageDto.page}, size = ${pageDto.size}, gno = ${pageDto.gno})}" class="btn btn-primary mt-3">modify</a>-->
-<!--    <a th:href="@{/guestbook/list(page = ${pageDto.page}, size = ${pageDto.size})}" class="btn btn-primary mt-3">List</a>-->
       <a th:href="@{/board/modify(page = ${requestDto.page}, size = ${requestDto.size}, bno= ${dto.bno}, type=${requestDto.type}, keyword=${requestDto.keyword})}" class="btn btn-primary mt-3">modify</a>
       <a th:href="@{/board/list(page = ${requestDto.page}, size = ${requestDto.size}, type=${requestDto.type}, keyword=${requestDto.keyword})}" class="btn btn-primary mt-3">List</a>
-  </form>
+
+    <div class="mt-4">
+      <h5><button class="badge bg-info addReply p-2 text-decoration-none text-white border-0"> Add Reply</button></h5>
+      <h5><button class="badge bg-secondary replyCount p-2 text-decoration-none text-white board-0"> Reply Count [[${dto.replyCount}]]</button></h5>
+      <ul class="list-group replyList">
+
+      </ul>
+    </div>
   </th:block>
 </th:block>
-<script>
-  //전역 변수로 counter 0
-  //10 ** 3
+<!-- The Modal -->
+<div class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
 
-  let counter = 0;
-  function callLocal(n, cb) {
-    const add = 10 ** n;
-    counter += add;
-    console.log(`[local] 10^${n} = ${add} -> counter : ${counter}`);
-  }
-  function callAsync(n, cb) {
-    const add = 10 ** n;
-    const delay = Math.floor(Math.random() * 1000); //0 ~ 999 사이의 난수
-    if(cb) cb();
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Modal Heading</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
 
-    setTimeout(() => {
-      counter += add;
-      console.log(`[async] 10^${n} = ${add} -> delay : ${delay}ms`);
-      if(cb) cb();
-    }, delay);
-  }
-  //callback : 정의한 시점이 아니라 추후에 호출되는 것. 파라미터로 전달되는 함수
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="form-group">
+          <input class="form-control" type="text" name="text" placeholder="ReplyText...">
+        </div>
+        <div class="form-group">
+          <input class="form-control" type="text" name="replyer" placeholder="Replyer">
+        </div>
+        <input type="hidden" name="rno">
+      </div>
 
-  callAsync(0, () => {
-    callAsync(1, () => {
-      callAsync(2, () => {
-        callAsync(3, () => {
-          callAsync(4, () => {
-            callLocal(5, () => {
-              callLocal(6, () => {
-                callLocal(7, () => {
-                  callLocal(8, () => {
-                    callLocal(9, () => {
-                      console.log("내가 마지막")
-                    });
-                  });
-                });
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary replyRemove">Remove</button>
+        <button type="button" class="btn btn-primary replyModify">Modify</button>
+        <button type="button" class="btn btn-primary replySave">Save</button>
+        <button type="button" class="btn btn-outline-secondary replyClose" data-bs-dismiss="modal">Close</button>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.13/dayjs.min.js" integrity="sha512-FwNWaxyfy2XlEINoSnZh1JQ5TRRtGow0D6XcmAWmYCRgvqOUTnzCxPc9uF35u5ZEpirk1uhlPVA19tflhvnW1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.13/plugin/relativeTime.min.js" integrity="sha512-MVzDPmm7QZ8PhEiqJXKz/zw2HJuv61waxb8XXuZMMs9b+an3LoqOqhOEt5Nq3LY1e4Ipbbd/e+AWgERdHlVgaA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.13/locale/ko.min.js" integrity="sha512-ycjm4Ytoo3TvmzHEuGNgNJYSFHgsw/TkiPrGvXXkR6KARyzuEpwDbIfrvdf6DwXm+b1Y+fx6mo25tBr1Icg7Fw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script th:inline="javascript">
+  window.addEventListener("load", e =>{
+    dayjs.extend(window.dayjs_plugin_relativeTime)
+    dayjs.locale('ko')
+
+    const bno = [[${dto.bno}]];  //변수호출 방식의 안정적인 보장을 위해서
+    const listGroup = document.querySelector(".replyList");
+    const myModal = new bootstrap.Modal(document.querySelector('.modal'));
+    const loadJSONData = () => {
+      //e.type -> click 이렇게 나온다.
+      //dayjs 전역 설정
+      fetch(`/replies/board/${bno}`)
+              .then(resp => resp.json())
+              .then(arr => {   //여기서 this는 windows객체 이다.
+                console.log(arr);
+                //success function;  //이벤트 위임 query selecter, 템플릿 리터럴을 사용하여 작성
+                document.querySelector(".replyCount").innerHTML = "Reply Count" + arr.length; // 기존 리스트 초기화
+                listGroup.innerHTML = arr.map(r => {  //,  listGroup의 내부에 html을 만듬
+                          console.log(r)  //문자열 배열들,
+                          return `
+                <li class="card list-group-item" data-rno="${r.rno}"><b>${r.rno}</b>
+                <div class="card-body">
+                   <h5 class="card-title">${r.text}</h5>
+                   <h5 class="card-subtitle mb-2 text-muted">${r.replyer}</h5>
+                   <p class="card-text">${dayjs(r.regDate).fromNow()}</p>
+                 </div>
+                </li>
+              `;
+                        }).join("")
+                      })
+                  };
+    document.querySelector('.replyCount').addEventListener("click", () => loadJSONData()); //배열을 문자로 합침. 문자열 배열을 통합된 문자열로 출력하는 과정이 있어야함
+
+    document.querySelector('.addReply').addEventListener("click", () => {
+
+
+      document.querySelectorAll('.modal input[type=text]').forEach(i => i.value ='');
+      [...document.querySelectorAll(".modal-footer button")].filter(b => {b.classList.add('d-none');  return b.matches('.replyClose, .replySave');}).forEach(b=> b.classList.remove('d-none'));
+      //console.log(b.matches('.replyClose, .replySave'));
+      myModal.show();
+      //click ev 부여
+      //reph obj 정립
+      //controller 제작
+      //fetch call
+      //then 이하 처리 //전부 테스트
+    });
+
+    document.querySelector('.replySave').addEventListener('click', e =>{
+      //1
+      console.log("save 선택");
+      //2
+      const reply = {bno}
+      console.log(reply);
+      e.target.closest(".modal").querySelectorAll("input[type=text]").forEach(i => reply[i.name] = i.value);
+      console.log(reply);
+
+      fetch("/replies", {
+        method: "POST",
+        headers: { "Content-Type": "application/json"
+        },
+        body: JSON.stringify(reply)
+      })
+              .then(resp => resp.json())
+              .then(data => {
+                console.log(data);
+                alert(data + "번 댓글 등록됨")
+                myModal.hide();
+                loadJSONData(e);
               });
-            });
-          });
-        });
-      });
+    })
+
+    document.querySelector('.replyList').addEventListener('click', function(e) {
+      const target = e.target;
+
+      // 클릭된 요소 또는 그 부모가 .card-body 인지 확인
+      const cardBody = target.closest('.card-body');
+      if (cardBody && this.contains(cardBody)) {
+
+        // 가장 가까운 .card 요소를 찾고 data-rno 값을 가져오기
+        const card = cardBody.closest('.card');
+        if (card) {
+          const rno = card.getAttribute('data-rno');
+
+          [...document.querySelectorAll(".modal-footer button")].filter(b => {b.classList.add('d-none');  return b.matches('.replyModify, .replyRemove, .replyClose');}).forEach(b=> b.classList.remove('d-none'));
+
+          document.querySelector("input[name='rno']")
+          document.querySelector("input[name='rno']").value = rno;
+
+          myModal.show();
+        }
+      }
     });
   });
-
-  // $.ajax({
-  //   success: (data) => {
-  //     $.ajax({
-  //       success: (data) => {
-  //
-  //       }
-  //     })
-  //   }
-  // })
-
-  // $.ajax({
-  //   success: (data) => {},
-  //   error: (error) => {},
-  //   finally: (data) => {}
-  // })
-  //     .done((data) => {
-  //
-  //     })
-  //     .fail(error => {
-  //
-  //     })
-  //     .always((data) => {
-  //
-  //     })
-  //     .done((data) => {
-  //
-  //     })
-
 </script>
 </html>

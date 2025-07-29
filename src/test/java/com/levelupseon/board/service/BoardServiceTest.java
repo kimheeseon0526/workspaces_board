@@ -50,4 +50,5 @@ public class BoardServiceTest {
   public void testRemove() {
     service.remove(116L);
   }
+
 }

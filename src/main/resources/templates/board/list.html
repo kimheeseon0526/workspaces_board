@@ -48,30 +48,6 @@
         <li class="page-item"><a class="page-link" href="#" th:href="@{/board/list(page = ${dto.end + 1}, size = ${dto.size}, type=${requestDto.type}, keyword= ${requestDto.keyword})}" th:if="${dto.next}">Next</a></li>
       </ul>
 
-      <!-- The Modal -->
-      <div class="modal" id="myModal">
-        <div class="modal-dialog">
-          <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-              <h4 class="modal-title">Modal Heading</h4>
-              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-
-            <!-- Modal body -->
-            <div class="modal-body">
-              등록 완뇽!
-            </div>
-
-            <!-- Modal footer -->
-            <div class="modal-footer">
-              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-            </div>
-
-          </div>
-        </div>
-
 
       <script th:inline="javascript">
         window.onload = function() {
@@ -83,7 +59,6 @@
           }
         }
       </script>
-      </div>
     </th:block>
   </th:block>
 </html>
