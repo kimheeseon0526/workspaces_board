@@ -83,24 +83,24 @@ let counter = 0;
 //Thenable function
 
 function callLocal(n){
-    return new Promise((resolve) => {
-        const add = 10 ** n;
-        counter += add;
-        console.log(`[local] 10^${n} = ${add} -> counter : ${counter}`);
-        resolve();
-    });
+  return new Promise((resolve) => {
+    const add = 10 ** n;
+    counter += add;
+    console.log(`[local] 10^${n} = ${add} -> counter : ${counter}`);
+    resolve();
+  });
 }
 function callAsync(n){
-    return new Promise((resolve) =>{
-        const add = 10 ** n;
-        const delay =Math.floor(Math.random() * 1000); // 0~ 999
+  return new Promise((resolve) =>{
+    const add = 10 ** n;
+    const delay =Math.floor(Math.random() * 1000); // 0~ 999
 
-        setTimeout(() => {
-            counter += add;
-            console.log(`[async] 10^${n} = ${add} -> counter : ${counter}, delay: ${delay}ms`);
-            resolve();
-        }, delay);
-    });
+    setTimeout(() => {
+      counter += add;
+      console.log(`[async] 10^${n} = ${add} -> counter : ${counter}, delay: ${delay}ms`);
+      resolve();
+    }, delay);
+  });
 }
 
 // callAsync(0)
@@ -162,18 +162,18 @@ function callAsync(n){
 
 //async, await
 async function run(){
-    await callAsync(0);
-    await callAsync(1);
-    await callAsync(2);
-    await callAsync(3);
-    await callAsync(4);
-    await callLocal(5);
-    await callLocal(6);
-    await callLocal(7);
-    await callLocal(8);
-    console.log("마지막 await 이전");
-    await callLocal(9);
-    console.log("마지막 await 이후");
+  await callAsync(0);
+  await callAsync(1);
+  await callAsync(2);
+  await callAsync(3);
+  await callAsync(4);
+  await callLocal(5);
+  await callLocal(6);
+  await callLocal(7);
+  await callLocal(8);
+  console.log("마지막 await 이전");
+  await callLocal(9);
+  console.log("마지막 await 이후");
 }
 // run();
 
@@ -194,12 +194,12 @@ async function run(){
 // fetchWithCallback("../replies/board/1", () => fetchWithCallback("../replies/board/2", () => fetchWithCallback("../replies/board/3")));
 
 function fetchReplies(bno){
-    return fetch(`../replies/board/${bno}`)
-        .then(response => response.json())
-        .then(data => {
-            console.log("콜백 결과", bno)
-            console.log(data)
-        })
+  return fetch(`../replies/board/${bno}`)
+      .then(response => response.json())
+      .then(data => {
+        console.log("콜백 결과", bno)
+        console.log(data)
+      })
 }
 
 // fetchReplies(1)
@@ -209,8 +209,8 @@ function fetchReplies(bno){
 
 //익명함수 처리
 (async() => {
-    await fetchReplies(1)
-    await fetchReplies(2)
-    await fetchReplies(3)
-    console.log('IIFE + Await Call 적용')
+  await fetchReplies(1)
+  await fetchReplies(2)
+  await fetchReplies(3)
+  console.log('IIFE + Await Call 적용')
 })(); //IIFE
