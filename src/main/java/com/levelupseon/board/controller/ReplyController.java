@@ -15,6 +15,7 @@ import java.util.List;
 @RequestMapping("replies")
 @Log4j2
 @RequiredArgsConstructor
+@CrossOrigin(origins="http://localhost:3000")
 public class ReplyController {
   private final ReplyService replyService;
 
@@ -23,7 +24,7 @@ public class ReplyController {
   public ResponseEntity<?> getList(@PathVariable("bno") Long bno) {
 
     log.info(bno);
-    return ResponseEntity.ok(bno);
+    return ResponseEntity.ok(replyService.getList(bno));
   }
 
   @PostMapping("")

@@ -147,22 +147,53 @@
 
     //1.이벤트 등록(위임) 세부 개념 >> 이벤트 버블링
     //2.모달 오픈 해야할 일 정의(rno, text, replter 정리, 버튼 재배치)
-    document.querySelector(".replyList").addEventListener("click", e => {
-      const li =  e.target.closest("li");
-      const text = li.querySelector(".card-title").innerText;
-      const replyer = li.querySelector(".card-subtitle").innerText;
+    // document.querySelector(".replyList").addEventListener("click", e => {
+    //   const li =  e.target.closest("li");
+    //   const text = li.querySelector(".card-title").innerText;
+    //   const replyer = li.querySelector(".card-subtitle").innerText;
+    //
+    //   document.querySelector(".modal input[name=text]").value = text;
+    //   document.querySelector(".modal input[name=replyer]").value = replyer;
+    //   document.querySelector(".modal input[name=rno]").value = li.dataset.rno;
+    //
+    //
+    //   document.querySelectorAll('.modal input[type=text]').forEach(i => i.value ='');
+    //   [...document.querySelectorAll(".modal-footer button")]
+    //       .filter(b => {b.classList.remove('d-none');  return b.matches('.replySave');})
+    //       .forEach(b=> b.classList.remove('d-none'));
+    //
+    //   myModal.show();
+    // });
+    document.querySelector('.replyList').addEventListener('click', function (e) {
+      console.log(e.target);
+      const target = e.target;
 
-      document.querySelector(".modal input[name=text]").value = text;
-      document.querySelector(".modal input[name=replyer]").value = replyer;
-      document.querySelector(".modal input[name=rno]").value = li.dataset.rno;
+      // 클릭된 요소 또는 그 부모가 .card-body 인지 확인
+      const cardBody = target.closest('.card-body');
+      if (cardBody && this.contains(cardBody)) {
+
+        // 가장 가까운 .card 요소를 찾고 data-rno 값을 가져오기
+        const card = cardBody.closest('.card');
+        if (card) {
+          const rno = card.getAttribute('data-rno');
+
+          [...document.querySelectorAll(".modal-footer button")].filter(b => {
+            b.classList.add('d-none');
+            return b.matches('.replyModify, .replyRemove, .replyClose');
+          }).forEach(b => b.classList.remove('d-none'));
+
+          // 카드 내부에서 텍스트 가져오기
+          const text = card.querySelector('.card-title')?.textContent.trim();
+          const replyer = card.querySelector('.card-subtitle')?.textContent.trim();
 
 
-      document.querySelectorAll('.modal input[type=text]').forEach(i => i.value ='');
-      [...document.querySelectorAll(".modal-footer button")]
-          .filter(b => {b.classList.remove('d-none');  return b.matches('.replySave');})
-          .forEach(b=> b.classList.remove('d-none'));
+          document.querySelector("input[name='rno']").value = rno;
+          document.querySelector("input[name='text']").value = text;
+          document.querySelector("input[name='replyer']").value = replyer;
 
-      myModal.show();
+          myModal.show();
+        }
+      }
     });
 
     //삭제 버튼 처리 이벤트
