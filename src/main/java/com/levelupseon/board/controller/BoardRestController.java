@@ -41,7 +41,7 @@ public class BoardRestController {
   }
 
   @PostMapping("modify")
-  public ResponseEntity<?> modify (@ModelAttribute("requestDto") BoardDTO boardDTO){
+  public ResponseEntity<?> modify (@RequestBody BoardDTO boardDTO){
 //    rttr.addAttribute("bno", boardDTO.getBno());
 //    rttr.addAttribute("page", dto.getPage());
 //    rttr.addAttribute("size", dto.getSize());
@@ -52,7 +52,7 @@ public class BoardRestController {
   }
 
   @PostMapping("remove")
-  public ResponseEntity<?> remove(Long bno) {
+  public ResponseEntity<?> remove(@RequestBody Long bno) {
     service.remove(bno);
 
 //    rttr.addFlashAttribute("msg", bno);
